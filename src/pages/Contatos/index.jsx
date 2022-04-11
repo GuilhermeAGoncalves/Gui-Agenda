@@ -46,7 +46,7 @@ export default function Contatos() {
 
   const checkDados = () => {
     if (name !== null && email !== null && tell !== null) {
-      return false;
+      setCheck(false);
     } else {
       setCheck(true);
     }
