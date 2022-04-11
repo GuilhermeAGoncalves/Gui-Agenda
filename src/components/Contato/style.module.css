@@ -1,0 +1,8 @@
+.contatoElement {
+  padding: 10px;
+  border: 1px solid #690f67;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  min-width: 300px;
+}
