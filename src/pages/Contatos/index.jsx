@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Contato from "../../components/Contato";
 import Input from "../../components/Input";
 import Modal from "../../components/Modal";
@@ -13,9 +13,14 @@ export default function Contatos() {
   const [email, setEmail] = useState(null);
   const [tell, setTell] = useState(null);
   const [check, setCheck] = useState(null);
+  const navigate = useNavigate();
 
   const { buscarContatos, criarContato, contatos, alterarContato } =
     contatosContext;
+
+  if (window.localStorage.getItem("token") === "") {
+    navigate("/login");
+  }
 
   const openModal = () => {
     setModal(true);

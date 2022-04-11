@@ -1,17 +1,18 @@
 import React from "react";
 import { GrGithub, GrGoogle, GrFacebook } from "react-icons/gr";
+import css from "./style.module.css";
 
 export default function SocialNetwork(props) {
   return (
     <div {...props}>
       <span>
-        <GrGoogle />
+        <GrGoogle className={css.icon} />
       </span>
       <span>
-        <GrFacebook />
+        <GrFacebook className={css.icon} />
       </span>
       <span>
-        <GrGithub />
+        <GrGithub className={css.icon} />
       </span>
     </div>
   );
