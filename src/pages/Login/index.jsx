@@ -13,7 +13,7 @@ export default function Login() {
   const [status, setStatus] = useState();
   const navigate = useNavigate();
 
-  const { loading, request } = useFetch();
+  const { request } = useFetch();
 
   const handleChangeEmail = ($Event) => {
     setEmail($Event.target.value);
