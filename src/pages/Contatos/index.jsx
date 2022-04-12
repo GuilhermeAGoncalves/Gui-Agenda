@@ -8,26 +8,32 @@ import css from "./style.module.css";
 
 export default function Contatos() {
   const contatosContext = useContatos();
-  const [modal, setModal] = useState(false);
+  const [modalAdd, setModalAdd] = useState(false);
+  const [modalSelected, setModalSelected] = useState(false);
+  const [selected, setSelected] = useState({});
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [tell, setTell] = useState(null);
   const [check, setCheck] = useState(null);
   const navigate = useNavigate();
 
-  const { buscarContatos, criarContato, contatos, alterarContato } =
-    contatosContext;
+  const { buscarContatos, criarContato, contatos } = contatosContext;
 
   if (window.localStorage.getItem("token") === "") {
     navigate("/login");
   }
 
   const openModal = () => {
-    setModal(true);
+    setModalAdd(true);
   };
 
   const closeModal = () => {
-    setModal(false);
+    setModalAdd(false);
+  };
+
+  const openSelected = (nome, email, telefone) => {
+    setSelected({ nome, email, telefone });
+    setModalSelected(!modalSelected);
   };
 
   const handleChangeName = ($Event) => {
@@ -44,20 +50,17 @@ export default function Contatos() {
     $Event.preventDefault();
   };
 
-  const checkDados = () => {
-    if (name !== null && email !== null && tell !== null) {
-      setCheck(false);
-    } else {
-      setCheck(true);
-    }
-  };
-
   const addContacts = () => {
-    criarContato({ nome: name, email, telefones: tell });
-    buscarContatos();
-    setEmail(null);
-    setName(null);
-    setTell(null);
+    if (name !== null && email !== null && tell !== null) {
+      criarContato({ nome: name, email, telefones: tell });
+      buscarContatos();
+      setModalAdd(false);
+      setEmail(null);
+      setName(null);
+      setTell(null);
+    } else {
+      console.log("erro");
+    }
   };
 
   useEffect(() => {
@@ -81,7 +84,7 @@ export default function Contatos() {
             Add Contact
           </button>
 
-          {modal && (
+          {modalAdd && (
             <Modal>
               <form onSubmit={handleSubmit} className={css.formAdd}>
                 <p>Adicionar Contato</p>
@@ -94,10 +97,7 @@ export default function Contatos() {
                 <Input onChange={handleChangeTell} className={css.input}>
                   Numero do telefone:{" "}
                 </Input>
-                <button
-                  className={css.buttonAdd}
-                  onClick={check ? addContacts : ""}
-                >
+                <button className={css.buttonAdd} onClick={addContacts}>
                   Adicionar Contato
                 </button>
                 <button className={css.buttonClose} onClick={closeModal}>
@@ -111,6 +111,9 @@ export default function Contatos() {
             {contatos.length > 0 ? (
               contatos.map((el) => (
                 <Contato
+                  onClick={() =>
+                    openSelected(el.nome, el.email, el.telefones[0].numero)
+                  }
                   key={el.id}
                   nome={el.nome}
                   numero={
@@ -122,6 +125,22 @@ export default function Contatos() {
               <p>Não ha contatos</p>
             )}
           </ul>
+
+          {modalSelected && (
+            <Modal>
+              <div className={css.modalSelected}>
+                <h1>Nome: {selected.nome}</h1>
+                <h2>Email: {selected.email}</h2>
+                <p>Telefone Celular: {selected.telefone}</p>
+                <button
+                  className={css.buttonClose}
+                  onClick={() => setModalSelected(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </Modal>
+          )}
         </div>
 
         <footer></footer>
